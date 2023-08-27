@@ -30,7 +30,7 @@ class MatchCriteria{
     public $userVerification = "1023";
 }
 
-class RegisterRequest{
+class BuyRequest{
     public $header;
     public $challenge;
     public $username;
@@ -42,11 +42,11 @@ class RegisterRequest{
         $this->challenge =  createChallenge();// Set default value to Reg
         $this->username = isset($_POST["userID"]) ? $_POST["userID"] : "";
         $this->policy = new MatchCriteria();
-        $this->transac = isset($_POST[""]) ? $_POST[""] : "";
+        $this->transac = "buyinfo";
     }
 }
 
-$regi = new RegisterRequest();
+$buy = new BuyRequest();
 // echo $regi->policy->userVerification;
 
 // Usage example
@@ -59,11 +59,11 @@ $regi = new RegisterRequest();
 // echo "App ID: {$header->appID}" . PHP_EOL;
 
 $response = array(
-    'Header' => $regi->header,
-    'Username' => $regi->username,
-    'Challenge' => $regi->challenge,
-    'Policy' => $regi->policy,
-    'Transaction' => $regi->transac
+    'Header' => $buy->header,
+    'Username' => $buy->username,
+    'Challenge' => $buy->challenge,
+    'Policy' => $buy->policy,
+    'Transaction' => $buy->transac
 );
 
 echo json_encode($response);
