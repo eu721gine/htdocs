@@ -21,7 +21,7 @@ class OperationHeader {
     
     public function __construct() {
         $this->upv = new Version();
-        $this->op = Operation::Reg; // Set default value to Reg
+        $this->op = Operation::Auth;
         $this->serverdata = "1440";  //session expire time
     }
 }
@@ -35,12 +35,14 @@ class RegisterRequest{
     public $challenge;
     public $username;
     public $policy;
+    public $transac;
     
     public function __construct() {
         $this->header = new OperationHeader();
         $this->challenge =  createChallenge();// Set default value to Reg
         $this->username = isset($_POST["userID"]) ? $_POST["userID"] : "";
         $this->policy = new MatchCriteria();
+        $this->transac = isset($_POST[""]) ? $_POST[""] : "";
     }
 }
 
@@ -60,7 +62,8 @@ $response = array(
     'Header' => $regi->header,
     'Username' => $regi->username,
     'Challenge' => $regi->challenge,
-    'Policy' => $regi->policy
+    'Policy' => $regi->policy,
+    'Transaction' => $regi->transac
 );
 
 echo json_encode($response);
