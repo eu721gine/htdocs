@@ -82,9 +82,40 @@ $response["success"] = false;
 if ($publicKeyResource !== false) {
     $verify = openssl_verify($chall, base64_decode($signature), $publicKeyResource, OPENSSL_ALGO_SHA256);
     if ($verify === 1) {
-        $response["success"] = true;
+        // $response["success"] = true;
+        $targetUrl = 'https://192.168.0.5:443/test.php'; // POST 요청을 보낼 대상 URL
+
+        $data = array(
+            'key1' => 'value1',
+            'key2' => 'value2'
+        ); // 보낼 데이터
+
+        $options = array(
+            CURLOPT_URL => $targetUrl,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => http_build_query($data),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false
+        );
+
+        $ch = curl_init($targetUrl);
+
+        curl_setopt_array($ch, $options);
+
+        $res = curl_exec($ch);
+
+        if ($res === false) {
+            echo "cURL error: " . curl_error($ch);
+        } else {
+            echo "Response from target server: " . $res . "\n";
+        }
+
+        curl_close($ch);
+
+    }else{
+        $response["success"] = false;
+        echo json_encode($response);
     }
 }
-
-echo json_encode($response);
 ?>

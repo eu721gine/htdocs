@@ -1,20 +1,23 @@
 <?php
 $targetUrl = 'https://192.168.0.5:443/test.php'; // POST 요청을 보낼 대상 URL
 
-$dataToSend = "Hello from Sending Server!"; // 보낼 데이터
+$data = array(
+    'key1' => 'value1',
+    'key2' => 'value2'
+); // 보낼 데이터
+
+$options = array(
+    CURLOPT_URL => $targetUrl,
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => http_build_query($data),
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_SSL_VERIFYPEER => false,
+    CURLOPT_SSL_VERIFYHOST => false
+);
 
 $ch = curl_init($targetUrl);
 
-// SSL 인증서 검증 비활성화
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-// POST 요청 설정
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $dataToSend);
-
-// 응답을 받아오기 위해 설정
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt_array($ch, $options);
 
 $response = curl_exec($ch);
 
