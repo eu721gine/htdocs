@@ -74,26 +74,42 @@ if ($decodedPublicKey !== false) {
 }
 
 $response = array();
-$response["success"] = false;
-//$response["isValidPublicKey"] = $isPublicKeyValid;
-//$response["issame"] = $issame2;
+$response["purchased"] = false;
 
+
+//FIDO의 카드정보 조회
+function getcard($userID) {
+    $con = mysqli_connect("192.168.0.2", "root", "root", "bpm", 3306);
+    mysqli_query($con, 'SET NAMES utf8');
+
+    // SQL 문을 실행하여 pk 테이블에서 publickey를 조회합니다.
+    $sql = "SELECT * FROM card WHERE userID = '$userID'";
+    $result = $con->query($sql);
+
+    if ($result->num_rows > 0) {
+        // 결과가 있을 경우 publickey 값을 반환합니다.
+        $row = $result->fetch_assoc();
+        return $row;
+    } else {
+        // 결과가 없을 경우 0을 반환합니다.
+        return "0";
+    }
+}
 
 if ($publicKeyResource !== false) {
     $verify = openssl_verify($chall, base64_decode($signature), $publicKeyResource, OPENSSL_ALGO_SHA256);
+
     if ($verify === 1) {
         // $response["success"] = true;
-        $targetUrl = 'https://192.168.0.5:443/test.php'; // POST 요청을 보낼 대상 URL
+        
+        $cardinfo= getcard($userID); //보낼 카드 정보
 
-        $data = array(
-            'key1' => 'value1',
-            'key2' => 'value2'
-        ); // 보낼 데이터
+        $targetUrl = 'https://192.168.0.5:443/card_pay.php'; // POST 요청을 보낼 대상 URL
 
         $options = array(
             CURLOPT_URL => $targetUrl,
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => http_build_query($data),
+            CURLOPT_POSTFIELDS => http_build_query($cardinfo), 
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false
@@ -108,13 +124,13 @@ if ($publicKeyResource !== false) {
         if ($res === false) {
             echo "cURL error: " . curl_error($ch);
         } else {
-            echo "Response from target server: " . $res . "\n";
+            echo $res;
         }
 
         curl_close($ch);
 
     }else{
-        $response["success"] = false;
+        $response["purchased"] = false;
         echo json_encode($response);
     }
 }
