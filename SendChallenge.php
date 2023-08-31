@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // 챌린지 생성 함수를 호출하여 챌린지를 생성합니다.
     $challenge = createChallenge();
     //$_SESSION['challenge'] = ($challenge['challenge']);
-    file_put_contents($filePath, $challenge['challenge']);
+    file_put_contents($filePath, json_encode($challenge));
     // 생성된 챌린지를 클라이언트에게 반환합니다.
     echo json_encode($challenge);
 }
@@ -31,7 +31,7 @@ function createChallenge() {
         'version' => '1.1', // FIDO UAF 프로토콜 버전
         // 기타 필요한 챌린지 데이터 (프로토콜 사양에 따라 구성)
     );
-    
+
     return $challengeData;
 }
 

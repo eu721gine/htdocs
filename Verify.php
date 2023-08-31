@@ -76,7 +76,6 @@ if ($decodedPublicKey !== false) {
 $response = array();
 $response["purchased"] = false;
 
-
 //FIDO의 카드정보 조회
 function getcard($userID) {
     $con = mysqli_connect("192.168.0.2", "root", "root", "bpm", 3306);
@@ -89,7 +88,8 @@ function getcard($userID) {
     if ($result->num_rows > 0) {
         // 결과가 있을 경우 publickey 값을 반환합니다.
         $row = $result->fetch_assoc();
-        return $row;
+        $filteredRow = array_diff_key($row, ['userID' => true]);
+        return $filteredRow;
     } else {
         // 결과가 없을 경우 0을 반환합니다.
         return "0";
@@ -97,10 +97,11 @@ function getcard($userID) {
 }
 
 if ($publicKeyResource !== false) {
-    $verify = openssl_verify($chall, base64_decode($signature), $publicKeyResource, OPENSSL_ALGO_SHA256);
+    $verify = openssl_verify(hash('sha256', $chall, true), base64_decode($signature), $publicKeyResource, OPENSSL_ALGO_SHA256);
 
     if ($verify === 1) {
-        // $response["success"] = true;
+        // $response["purchased"] = true;
+        // echo json_encode($response);
         
         $cardinfo= getcard($userID); //보낼 카드 정보
 

@@ -28,6 +28,15 @@ try {
         // 공개키 정보 쿼리 실행
         $keyResult = $keyStatement->execute();
 
+        $cardstatement = $db->prepare("DELETE FROM card WHERE userID = :userIDToDelete");
+        $cardstatement->bindParam(':userIDToDelete', $userIDToDelete, PDO::PARAM_STR);
+        $cardResult = $cardstatement->execute();
+
+        $detailstatement = $db->prepare("DELETE FROM pay_detail WHERE userID = :userIDToDelete");
+        $detailstatement->bindParam(':userIDToDelete', $userIDToDelete, PDO::PARAM_STR);
+        $detailResult = $detailstatement->execute();
+
+
         $response = array();
         if ($result && $keyResult) {
             $response["success"] = true;

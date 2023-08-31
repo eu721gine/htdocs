@@ -3,6 +3,10 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 try {
+
+    $response = array();
+    $response["success"] = false;
+
     $db = new PDO("mysql:host=192.168.0.2;dbname=bpm;charset=utf8", "root", "root");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -29,7 +33,15 @@ try {
     // 쿼리 실행
     $statement->execute();
 
-    $response = array();
+    //pay_detail 생성
+    $paystatement = $db->prepare("INSERT INTO PAY_DETAIL (userID, p_ID, product, amount, unitPrice, totalPrice) VALUES (:userID, 1, '휴지', 0, 1500, 0)");
+    $paystatement->bindParam(':userID', $userID, PDO::PARAM_STR);
+    $payResult = $paystatement->execute();
+
+    $detailstatement = $db->prepare("INSERT INTO PAY_DETAIL (userID, p_ID, product, amount, unitPrice, totalPrice) VALUES (:userID, 2, '칫솔', 0, 1000, 0)");
+    $detailstatement->bindParam(':userID', $userID, PDO::PARAM_STR);
+    $detailResult = $detailstatement->execute();
+    
     $response["success"] = true;
 
     echo json_encode($response);

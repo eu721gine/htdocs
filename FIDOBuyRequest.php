@@ -1,5 +1,6 @@
 <?php
 require '/Applications/MAMP/htdocs/SendChallenge.php';
+$filePath = '/Applications/MAMP/htdocs/challenge.txt';
 
 class Version {
     public $major = 1;
@@ -48,6 +49,8 @@ class BuyRequest{
 
 $buy = new BuyRequest();
 // echo $regi->policy->userVerification;
+file_put_contents($filePath, json_encode($buy->challenge));
+
 
 // Usage example
 // $header = new OperationHeader();
