@@ -2,6 +2,8 @@
 require '/Applications/MAMP/htdocs/SendChallenge.php';
 $filePath = '/Applications/MAMP/htdocs/challenge.txt';
 
+$p_id = isset($_POST["p_id"]) ? $_POST["p_id"] : "";
+
 class Version {
     public $major = 1;
     public $minor = 1;
@@ -31,6 +33,26 @@ class MatchCriteria{
     public $userVerification = "1023";
 }
 
+//FIDO의 product_list조회
+function getTx($p_id) {
+    $con = mysqli_connect("192.168.0.2", "root", "root", "bpm", 3306);
+    mysqli_query($con, 'SET NAMES utf8');
+
+    // SQL 문을 실행하여 pk 테이블에서 publickey를 조회합니다.
+    $sql = "SELECT * FROM product_list WHERE p_id = '$p_id'";
+    $result = $con->query($sql);
+
+    if ($result->num_rows > 0) {
+        // 결과가 있을 경우 publickey 값을 반환합니다.
+        $row = $result->fetch_assoc();
+        $filteredRow = array_diff_key($row, ['p_id' => true]);
+        return $filteredRow;
+    } else {
+        // 결과가 없을 경우 0을 반환합니다.
+        return "0";
+    }
+}
+
 class BuyRequest{
     public $header;
     public $challenge;
@@ -43,13 +65,16 @@ class BuyRequest{
         $this->challenge =  createChallenge();// Set default value to Reg
         $this->username = isset($_POST["userID"]) ? $_POST["userID"] : "";
         $this->policy = new MatchCriteria();
-        $this->transac = "buyinfo";
+
+        $p_id = isset($_POST["p_id"]) ? $_POST["p_id"] : "";
+        $this->transac = getTx($p_id);
     }
 }
 
 $buy = new BuyRequest();
 // echo $regi->policy->userVerification;
-file_put_contents($filePath, json_encode($buy->challenge));
+$sn = array("challenge"=>json_encode($buy->challenge),"transaction"=>json_encode($buy->transac));
+file_put_contents($filePath, json_encode($sn));
 
 
 // Usage example

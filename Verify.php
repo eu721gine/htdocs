@@ -1,5 +1,6 @@
 <?php
 //session_start();
+// require '/Applications/MAMP/htdocs/FIDOBuyRequest.php';
 
 $filePath = '/Applications/MAMP/htdocs/challenge.txt';
 $chall = file_get_contents($filePath);
@@ -9,7 +10,6 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 $android = strpos($_SERVER['HTTP_USER_AGENT'], "Android");
-
 
 function getPublicKey($userID) {
     $con = mysqli_connect("192.168.0.2", "root", "root", "bpm", 3306);
@@ -126,6 +126,10 @@ if ($publicKeyResource !== false) {
             echo "cURL error: " . curl_error($ch);
         } else {
             echo $res;
+
+            // $con = mysqli_connect("192.168.0.2", "root", "root", "bpm", 3306);
+            // $buy = "UPDATE product_list SET p_left = p_left - 1 where p_id = '$p_id'";
+            // $con->query($buy);
         }
 
         curl_close($ch);
