@@ -1,6 +1,5 @@
 <?php
 //session_start();
-// require '/Applications/MAMP/htdocs/FIDOBuyRequest.php';
 
 $filePath = '/Applications/MAMP/htdocs/challenge.txt';
 $chall = file_get_contents($filePath);
@@ -30,6 +29,7 @@ function getPublicKey($userID) {
 }
 
 $userID = isset($_POST['userID']) ? $_POST["userID"] : "";
+$p_id = isset($_POST['p_id']) ? $_POST["p_id"] : "";
 $message = isset($_POST['message']) ? $_POST["message"] : "";
 $signature = isset($_POST['signature']) ? $_POST["signature"] : "";
 $publicKey1 = isset($_POST['publicKey']) ? $_POST["publicKey"] : "";
@@ -125,11 +125,11 @@ if ($publicKeyResource !== false) {
         if ($res === false) {
             echo "cURL error: " . curl_error($ch);
         } else {
-            echo $res;
+            $con = mysqli_connect("192.168.0.2", "root", "root", "bpm", 3306);
+            $buy = "UPDATE product_list SET p_left = p_left - 1 where p_id = '$p_id'";
+            $con->query($buy);
 
-            // $con = mysqli_connect("192.168.0.2", "root", "root", "bpm", 3306);
-            // $buy = "UPDATE product_list SET p_left = p_left - 1 where p_id = '$p_id'";
-            // $con->query($buy);
+            echo $res;
         }
 
         curl_close($ch);

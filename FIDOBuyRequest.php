@@ -73,7 +73,11 @@ class BuyRequest{
 
 $buy = new BuyRequest();
 // echo $regi->policy->userVerification;
-$sn = array("challenge"=>json_encode($buy->challenge),"transaction"=>json_encode($buy->transac));
+$data = $buy->transac;
+unset($data['p_left']);
+$data['p_num'] = 1;
+
+$sn = array("challenge"=>json_encode($buy->challenge),"transaction"=>json_encode($data));
 file_put_contents($filePath, json_encode($sn));
 
 
@@ -91,7 +95,7 @@ $response = array(
     'Username' => $buy->username,
     'Challenge' => $buy->challenge,
     'Policy' => $buy->policy,
-    'Transaction' => $buy->transac
+    'Transaction' => $data
 );
 
 echo json_encode($response);

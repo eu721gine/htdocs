@@ -34,11 +34,11 @@ try {
     $statement->execute();
 
     //pay_detail 생성
-    $paystatement = $db->prepare("INSERT INTO PAY_DETAIL (userID, p_ID, product, amount, unitPrice, totalPrice) VALUES (:userID, 1, '휴지', 0, 1500, 0)");
+    $paystatement = $db->prepare("INSERT INTO PAY_DETAIL (userID, p_ID, product, amount, unitPrice, totalPrice) VALUES (:userID, 1, 'tissue', 0, 1500, 0)");
     $paystatement->bindParam(':userID', $userID, PDO::PARAM_STR);
     $payResult = $paystatement->execute();
 
-    $detailstatement = $db->prepare("INSERT INTO PAY_DETAIL (userID, p_ID, product, amount, unitPrice, totalPrice) VALUES (:userID, 2, '칫솔', 0, 1000, 0)");
+    $detailstatement = $db->prepare("INSERT INTO PAY_DETAIL (userID, p_ID, product, amount, unitPrice, totalPrice) VALUES (:userID, 2, 'toothbrush', 0, 1000, 0)");
     $detailstatement->bindParam(':userID', $userID, PDO::PARAM_STR);
     $detailResult = $detailstatement->execute();
     
