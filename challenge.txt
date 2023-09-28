@@ -1,1 +1,0 @@
-{"challenge":"{\"challenge\":\"ef9ce35cefa4240f92c7d6c1a1262723ac21042af42c45e3964ca1f860546963\",\"version\":\"1.1\"}","transaction":"{\"p_name\":\"tissue\",\"p_price\":\"1500\",\"p_num\":1}"}

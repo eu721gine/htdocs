@@ -1,5 +1,6 @@
 <?php
-require '/Applications/MAMP/htdocs/SendChallenge.php';
+require '/Applications/MAMP/htdocs/FIDO_SERVER/SendChallenge.php';
+$filePath = '/Applications/MAMP/htdocs/FIDO_SERVER/challenge.txt';
 
 class Version {
     public $major = 1;
@@ -15,7 +16,7 @@ abstract class Operation {
 class OperationHeader {
     public $upv;
     public $op;
-    public $appID=null;  //이건 client쪽에서 생성해서 server가 정당한 facetid를 주는것
+    public $appID="bpm";  //이건 client쪽에서 생성해서 server가 정당한 facetid를 주는것
     public $serverdata;
     // extension은 비움    
     
@@ -28,6 +29,8 @@ class OperationHeader {
 
 class MatchCriteria{
     public $userVerification = "1023";
+    public $authenticationAlgorithms = "1";
+    public $assertionSchemes = "UAFV1TLV";
 }
 
 class RegisterRequest{
@@ -45,19 +48,16 @@ class RegisterRequest{
 }
 
 $regi = new RegisterRequest();
-// echo $regi->policy->userVerification;
+file_put_contents($filePath, json_encode($regi->challenge));
 
-// Usage example
-// $header = new OperationHeader();
-// $header->op = Operation::Reg;
-
-// Access and print the values
-// echo "Version: {$header->upv->major}.{$header->upv->minor}" . PHP_EOL;
-// echo "Operation: {$header->op}" . PHP_EOL;
-// echo "App ID: {$header->appID}" . PHP_EOL;
+header('Content-Type: application/json');
+header('FIDO-Major-Version: ' . $regi->header->upv->major);
+header('FIDO-Minor-Version: ' . $regi->header->upv->minor);
+header('FIDO-Operation: ' . $regi->header->op);
+header('FIDO-appID: '.$regi->header->appID);
+header('FIDO-serverdata: '.$regi->header->serverdata);
 
 $response = array(
-    'Header' => $regi->header,
     'Username' => $regi->username,
     'Challenge' => $regi->challenge,
     'Policy' => $regi->policy

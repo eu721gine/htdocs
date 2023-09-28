@@ -1,7 +1,7 @@
 <?php
 //session_start();
 
-$filePath = '/Applications/MAMP/htdocs/challenge.txt';
+$filePath = '/Applications/MAMP/htdocs/FIDO_SERVER/challenge.txt';
 $chall = file_get_contents($filePath);
 
 
@@ -105,13 +105,10 @@ if ($publicKeyResource !== false) {
         
         $cardinfo= getcard($userID); //보낼 카드 정보
 
-        $targetUrl = 'https://192.168.0.5:443/card_pay.php'; // POST 요청을 보낼 대상 URL
+        $targetUrl = 'https://192.168.0.5:443/CARD/card_pay.php'; // POST 요청을 보낼 대상 URL
 
         $options = array(
-            CURLOPT_URL => $targetUrl,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => http_build_query($cardinfo), 
-            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_URL => $targetUrl, CURLOPT_POST => true, CURLOPT_POSTFIELDS => http_build_query($cardinfo), CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false
         );

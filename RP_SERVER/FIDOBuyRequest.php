@@ -1,6 +1,6 @@
 <?php
-require '/Applications/MAMP/htdocs/SendChallenge.php';
-$filePath = '/Applications/MAMP/htdocs/challenge.txt';
+require '/Applications/MAMP/htdocs/FIDO_SERVER/SendChallenge.php';
+$filePath = '/Applications/MAMP/htdocs/FIDO_SERVER/challenge.txt';
 
 $p_id = isset($_POST["p_id"]) ? $_POST["p_id"] : "";
 
@@ -18,7 +18,7 @@ abstract class Operation {
 class OperationHeader {
     public $upv;
     public $op;
-    public $appID=null;  //이건 client쪽에서 생성해서 server가 정당한 facetid를 주는것
+    public $appID="bpm";  //이건 client쪽에서 생성해서 server가 정당한 facetid를 주는것
     public $serverdata;
     // extension은 비움    
     
@@ -80,18 +80,14 @@ $data['p_num'] = 1;
 $sn = array("challenge"=>json_encode($buy->challenge),"transaction"=>json_encode($data));
 file_put_contents($filePath, json_encode($sn));
 
-
-// Usage example
-// $header = new OperationHeader();
-// $header->op = Operation::Reg;
-
-// Access and print the values
-// echo "Version: {$header->upv->major}.{$header->upv->minor}" . PHP_EOL;
-// echo "Operation: {$header->op}" . PHP_EOL;
-// echo "App ID: {$header->appID}" . PHP_EOL;
+header('Content-Type: application/json');
+header('FIDO-Major-Version: ' . $buy->header->upv->major);
+header('FIDO-Minor-Version: ' . $buy->header->upv->minor);
+header('FIDO-Operation: ' . $buy->header->op);
+header('FIDO-appID: '.$buy->header->appID);
+header('FIDO-serverdata: '.$buy->header->serverdata);
 
 $response = array(
-    'Header' => $buy->header,
     'Username' => $buy->username,
     'Challenge' => $buy->challenge,
     'Policy' => $buy->policy,

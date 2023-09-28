@@ -1,7 +1,7 @@
 <?php 
 
 //챌린지저장 디렉토리
-$filePath = '/Applications/MAMP/htdocs/challenge.txt';
+$filePath = '/Applications/MAMP/htdocs/FIDO_SERVER/challenge.txt';
 
 // 클라이언트로부터의 요청을 확인합니다.
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
