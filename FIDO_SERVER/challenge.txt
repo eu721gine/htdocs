@@ -1,1 +1,1 @@
-{"challenge":"44656005cc4855ad5271e34d92a153d9e81a485633c58740cb3c6ae274953fee","version":"1.1"}
+{"challenge":"{\"challenge\":\"1d1a57bf2ed604311aa9bdbd4aade66aa752a3d1af291316ccfc6d4a16980891\",\"version\":\"1.1\"}","transaction":"{\"p_name\":\"toothbrush\",\"p_price\":\"1000\",\"p_num\":1}"}

@@ -29,7 +29,7 @@ class OperationHeader {
 
 class MatchCriteria{
     public $userVerification = "1023";
-    public $authenticationAlgorithms = "1";
+    public $authenticationAlgorithms = "RSA";
     public $assertionSchemes = "UAFV1TLV";
 }
 

@@ -31,6 +31,8 @@ class OperationHeader {
 
 class MatchCriteria{
     public $userVerification = "1023";
+    public $authenticationAlgorithms = "RSA";
+    public $assertionSchemes = "UAFV1TLV";
 }
 
 //FIDO의 product_list조회

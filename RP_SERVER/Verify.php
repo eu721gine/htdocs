@@ -88,8 +88,9 @@ function getcard($userID) {
     if ($result->num_rows > 0) {
         // 결과가 있을 경우 publickey 값을 반환합니다.
         $row = $result->fetch_assoc();
-        $filteredRow = array_diff_key($row, ['userID' => true]);
-        return $filteredRow;
+        return $row;
+        // $filteredRow = array_diff_key($row, ['userID' => true]);
+        // return $filteredRow;
     } else {
         // 결과가 없을 경우 0을 반환합니다.
         return "0";
